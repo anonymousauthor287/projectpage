@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VDBench: A Benchmark for Visual Diachronic Analysis of Historical Depictions</title>
+<meta name="description" content="VDBench is a benchmark for Visual Diachronic Analysis — recovering how the visual context of a subject changes across documented historical periods, using a source-grounded topic collection and a controlled text-to-image pipeline. ICLR 2027 submission under double-blind review.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='4' width='24' height='24' rx='4' transform='rotate(45 16 16)' fill='%232c6188'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topnav">
+  <div class="topnav-inner">
+    <a class="brand" href="#top" aria-label="VDBench home">
+      <svg width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="4" width="24" height="24" rx="4" transform="rotate(45 16 16)" fill="currentColor" style="color:var(--accent)"/></svg>
+      VD<b>Bench</b>
+    </a>
+    <nav class="navlinks" aria-label="Section">
+      <a href="#abstract">Abstract</a>
+      <a href="#diachrony">Concept</a>
+      <a href="#dataset">Dataset</a>
+      <a href="#tasks">Tasks</a>
+      <a href="#validation">Validation</a>
+      <a href="#results">Results</a>
+      <a href="#access">Access</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============================= HERO ============================= -->
+<section class="hero" id="top">
+  <div class="container">
+    <div class="badge-row">
+      <span class="badge badge-accent"><span class="dot" aria-hidden="true"></span>ICLR 2027 submission · under double-blind review</span>
+      <span class="badge">Benchmark</span>
+      <span class="badge">Synthetic historical imagery</span>
+      <span class="badge">Computer vision &times; digital humanities</span>
+    </div>
+
+    <h1 class="hero-title">VDBench: a benchmark for <span class="accent-word">visual diachronic</span> analysis</h1>
+    <p class="hero-dek">Recognisable subjects stay the same across history — but what they <em>mean</em> does not. VDBench asks whether computational methods can recover documented shifts in meaning from the changing visual context of historical depictions.</p>
+
+    <div class="btn-row">
+      <a class="btn btn-primary" href="https://anonymous-hf.com/a/yx8guz54j8ct/" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg>
+        Get the dataset
+      </a>
+      <a class="btn btn-secondary" href="https://anonymousauthor287.github.io/vdbench-explorer/" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15 9-2.2 5.5a1 1 0 0 1-.55.55L7 17l2.2-5.5a1 1 0 0 1 .55-.55L15 9Z"/></svg>
+        Open the explorer
+      </a>
+      <a class="btn btn-ghost" href="#dataset">Dataset details &amp; splits ↓</a>
+    </div>
+    <p class="btn-sub" style="margin-top:14px;">Code for corpus construction &amp; image generation will be released upon acceptance.</p>
+
+    <p class="hero-authors">Anonymous Author(s) &middot; Affiliation withheld for review</p>
+
+    <figure class="figure hero-figure">
+      <div class="fig-media">
+        <img src="assets/img/teaser.webp" alt="Two examples of visual diachrony. Top: photographs of 'women in trousers' in the 1910s (described as scandalous, tasteless, shocking), the 1940s (practical, decent, work garment), and the 2010s (ordinary, casual, typical). Bottom: the linguistic example of the word 'gay' shifting from cheerful and frolicsome (1900s) through pleasant and jaunty (1950s) to homosexual and lesbian (1990s).">
+      </div>
+      <figcaption><b>Fig. 1</b>Linguistic diachrony (bottom, adapted from Hamilton et al.) and its visual analogue (top): the subject persists, but its surrounding context — and the meaning read from it — shifts across periods.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================= ABSTRACT ============================= -->
+<section class="section" id="abstract">
+  <div class="container prose-width">
+    <div class="eyebrow"><span class="num">§01</span> Abstract</div>
+    <div class="abstract-card">
+      <span class="drop">W</span>e introduce <strong>Visual Diachronic Analysis</strong> (VDA), a new computer vision challenge for studying how the visual context of a depicted subject or theme changes over time and how these changes relate to documented historical shifts in meaning. This raises the question to what extent such changes in meaning can be inferred computationally from historical depictions. To study such phenomena, we introduce <strong>VDBench</strong>, the first benchmark for VDA. In absence of available and sufficiently annotated historical image collections, we propose an unconventional approach: we construct a historically grounded synthetic benchmark dataset. We compile a source-grounded collection of human-centred diachronic themes and design a controlled text-to-image pipeline to generate plausible synthetic historical depictions. Domain experts confirm the suitability and plausibility of the data. We specify several computer vision tasks, propose a suitable evaluation methodology, and provide baseline methods and implementations as reference for future work. The dataset and an interactive explorer are available above. All code will be released upon acceptance.
+    </div>
+  </div>
+</section>
+
+<div class="timeline-divider" aria-hidden="true">
+  <div class="seg"><span class="tick"></span></div>
+  <div class="track"></div>
+  <div class="seg"><span class="tick"></span></div>
+  <div class="track"></div>
+  <div class="seg"><span class="tick"></span></div>
+  <div class="track"></div>
+  <div class="seg"><span class="tick"></span></div>
+</div>
+
+<!-- ============================= CONCEPT ============================= -->
+<section class="section" id="diachrony">
+  <div class="container">
+    <div class="two-col">
+      <div>
+        <div class="eyebrow"><span class="num">§02</span> The idea</div>
+        <h2 class="section-title">From lexical drift to visual drift</h2>
+        <div class="prose">
+          <p><em>Diachronic analysis</em> originates in linguistics: historical semantics studies how a word's meaning shifts while its form stays fixed. Hamilton et al. showed this computationally — aligning word embeddings across decades reveals the neighbours of &ldquo;gay&rdquo; moving from <em>cheerful</em> and <em>frolicsome</em> toward <em>homosexual</em> and <em>lesbian</em> over the twentieth century.</p>
+          <p>VDA asks the analogous question of images. A subject — a person, an object, an activity — can remain visually recognisable across a century while the <strong>environment</strong>, <strong>activity</strong>, and co-occurring elements around it change, tracking a documented shift in social meaning. Women wearing trousers stayed exactly that; what moved was everything around them — from suffrage demonstrations, to wartime factories, to ordinary streets.</p>
+          <p>VDBench operationalises this with four coordinates borrowed from context-aware computing: <strong>identity</strong> (the recurring subject), <strong>where</strong> (environment), <strong>what</strong> (activity and scene), and <strong>when</strong> (year). A <em>visual diachronic topic</em> is a subject plus its documented sequence of periods; the ordered periods form its <em>diachronic trajectory</em>.</p>
+        </div>
+      </div>
+      <div class="concept-grid" style="margin-top:0;">
+        <div class="concept-card">
+          <h3>Identity — who / what persists</h3>
+          <p>The recurring subject that anchors a topic across every period, e.g. trousers as a garment, or smoking as a practice.</p>
+        </div>
+        <div class="concept-card">
+          <h3>Where — environment</h3>
+          <p>The depicted setting: a factory floor, a street demonstration, a domestic kitchen — drawn from a closed scene vocabulary.</p>
+        </div>
+        <div class="concept-card">
+          <h3>What — activity &amp; context</h3>
+          <p>The activity and co-occurring elements in frame, plus an open caption describing the remaining observable context.</p>
+        </div>
+        <div class="concept-card">
+          <h3>When — year</h3>
+          <p>The point in time a depiction originates from, situating it within one period of the topic's trajectory.</p>
+          <div class="concept-chain">
+            <span class="tag">1910s</span><span class="arrow">→</span><span class="tag">1940s</span><span class="arrow">→</span><span class="tag">2010s</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= CONTRIBUTIONS ============================= -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="eyebrow"><span class="num">§03</span> Contributions</div>
+    <h2 class="section-title">What this paper adds</h2>
+    <div class="contrib-grid">
+      <div class="contrib-card">
+        <div class="idx">01</div>
+        <h3>A new challenge</h3>
+        <p>Visual Diachronic Analysis, with two concrete benchmark tasks: per-image <strong>context detection</strong> and <strong>diachronic trajectory discovery</strong>.</p>
+      </div>
+      <div class="contrib-card">
+        <div class="idx">02</div>
+        <h3>The VDBench benchmark</h3>
+        <p>A historically grounded topic collection with plausible synthetic depictions, built via semi-automatic retrieval and generation pipelines, plus a full evaluation framework.</p>
+      </div>
+      <div class="contrib-card">
+        <div class="idx">03</div>
+        <h3>First baselines</h3>
+        <p>Two zero-shot, open-weight reference implementations for both tasks, exposing how far current foundation models are from solving VDA.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= DATASET ============================= -->
+<section class="section" id="dataset">
+  <div class="container">
+    <div class="eyebrow"><span class="num">§04</span> Dataset &amp; construction</div>
+    <h2 class="section-title">Built from documented history, not from image archives</h2>
+    <p class="lede">Historical archives are rarely catalogued by diachronic topic, so VDBench starts from the historical record and works forward to images — the reverse of the usual dataset-construction direction.</p>
+
+    <div class="stat-row">
+      <div class="stat-tile"><div class="n">20,100</div><div class="l">Generated images</div></div>
+      <div class="stat-tile"><div class="n">41</div><div class="l">Diachronic topics</div></div>
+      <div class="stat-tile"><div class="n">201</div><div class="l">Periods</div></div>
+      <div class="stat-tile"><div class="n">100</div><div class="l">Images per period</div></div>
+    </div>
+    <div class="stat-row secondary">
+      <div class="stat-tile"><div class="n">148<small>/266</small></div><div class="l">Topics retained after source audit</div></div>
+      <div class="stat-tile"><div class="n">706</div><div class="l">Documented period descriptions</div></div>
+      <div class="stat-tile"><div class="n">174</div><div class="l">Verified publications / webpages</div></div>
+    </div>
+
+    <div class="step-list">
+      <div class="step">
+        <div class="num">01</div>
+        <div><h4>Topic sourcing</h4><p>An LLM plays <em>Historian</em> — proposing photographable topics, their periods, and claim-specific search terms — while a second <em>Librarian</em> role retrieves and links sources (Crossref, OpenAlex, Semantic Scholar, Open Library) that support each claim.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">02</div>
+        <div><h4>Human filtering &amp; expert review</h4><p>Authors remove topics with unsupported claims or unverifiable sources (266 → 148). Humanities experts then review the remaining trajectories for historical validity before any image is generated.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">03</div>
+        <div><h4>Controlled image generation</h4><p>Each accepted period is specified by <em>when</em> (a year in-range), <em>where</em> (an environment), and <em>what</em> (an activity, plus an optional dated trend). Combinations are grounded against real photographic evidence with CLIP before a generation prompt is written and the image rendered.</p></div>
+      </div>
+      <div class="step">
+        <div class="num">04</div>
+        <div><h4>Verify &amp; record</h4><p>Every rendered image is re-checked with CLIP for the requested environment, activity, and trend, and regenerated until it passes. The full construction trace is retained as metadata.</p></div>
+      </div>
+    </div>
+
+    <figure class="figure" style="margin-top:34px;">
+      <div class="fig-media"><img src="assets/img/pipeline.webp" alt="Diagram of the VDBench dataset construction pipeline: Historian, Retrieval and Librarian agents source 148 topics from 266 proposed; an expert-accepted subset of 37 topics moves into controlled image generation (parameters, pre-verification, describe, render, post-verification) with a fail loop for retry/reconfigure, producing the final dataset and benchmark; human validation runs alongside via author audit, Stage 1 expert review, and Stage 2 image review.">
+      </div>
+      <figcaption><b>Fig. 2</b>Semi-automatic VDBench construction: source-grounded topic collection, expert-in-the-loop filtering, and controlled, self-verifying image generation.</figcaption>
+    </figure>
+
+    <div class="chip-row">
+      <span class="chip"><b>669</b> environment classes — Places365 + SUN</span>
+      <span class="chip"><b>177</b> activity classes — ATUS, HETUS, MTUS</span>
+      <span class="chip"><b>74</b> dated-trend labels — Wikipedia photo categories</span>
+      <span class="chip">Generation: GPT‑5.6&nbsp;Sol prompts → Nano&nbsp;Banana&nbsp;Fast render → CLIP verify</span>
+    </div>
+
+    <div class="footnote-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span>Two release splits are provided for supervised methods — a <strong>uniform split</strong> (every topic in train/val/test) and a <strong>topic-disjoint split</strong> (held-out topics, for generalisation). Full field-level documentation, download instructions, and split files live on the dataset page — see the <em>Get the dataset</em> button above.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= TASKS ============================= -->
+<section class="section section-alt" id="tasks">
+  <div class="container">
+    <div class="eyebrow"><span class="num">§05</span> Benchmark tasks</div>
+    <h2 class="section-title">Two tasks, one trajectory</h2>
+    <p class="lede">Task 1 reads the context out of a single image; Task 2 assembles many images — with either ground truth or Task-1 predictions — back into a topic's diachronic trajectory.</p>
+
+    <figure class="figure" style="margin-top:30px;">
+      <div class="fig-media"><img src="assets/img/tasks.webp" alt="Illustration of the two benchmark tasks on the women-in-trousers example: six periods from Dress reform (1850-1899) through Full acceptance (1980-2025) laid out on a timeline. Task 1, per-image context, takes a single image and predicts when (year 1892), where (street), what (shopping), and a caption. Task 2, topic and trajectory discovery, takes the image collection plus Task 1 readings and predicts a topic title (women in trousers), overall description, and an ordered trajectory of periods, e.g. period P5 titled Liberation era, ranged 1960-1979, describing trousers gaining acceptance in fashion and workplaces.">
+      </div>
+      <figcaption><b>Fig. 3</b>Task 1 estimates when/where/what for one image; Task 2 partitions a topic's full image set into a titled, dated, described sequence of periods.</figcaption>
+    </figure>
+
+    <div class="task-grid">
+      <div class="task-card">
+        <span class="tk-label">Task 1</span>
+        <h3>Visual context detection</h3>
+        <div class="io-row"><div class="io-k">In</div><div class="io-v">a single image <em>I</em>.</div></div>
+        <div class="io-row"><div class="io-k">Out</div><div class="io-v">estimated year, environment, activity, and a free-form caption of the visible context.</div></div>
+        <ul>
+          <li><strong>When</strong> — year the depiction is set in</li>
+          <li><strong>Where</strong> — environment, closed vocabulary</li>
+          <li><strong>What</strong> — activity, closed vocabulary</li>
+          <li><strong>Caption</strong> — open-vocabulary context description</li>
+        </ul>
+      </div>
+      <div class="task-card">
+        <span class="tk-label">Task 2</span>
+        <h3>Topic &amp; trajectory discovery</h3>
+        <div class="io-row"><div class="io-k">In</div><div class="io-v">an image set for one (identity-hidden) topic, with per-image context — ground truth or Task-1 predictions.</div></div>
+        <div class="io-row"><div class="io-k">Out</div><div class="io-v">topic title &amp; description, plus an ordered, described period sequence.</div></div>
+        <ul>
+          <li>Partition images into <strong>J</strong> periods</li>
+          <li>Title, year range &amp; description per period</li>
+          <li>Chronological ordering of the trajectory</li>
+          <li>No Task-2 ground truth or human input provided</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= VALIDATION ============================= -->
+<section class="section" id="validation">
+  <div class="container">
+    <div class="eyebrow"><span class="num">§06</span> Validation</div>
+    <h2 class="section-title">Checked at three levels, by humans throughout</h2>
+    <p class="lede">Because the benchmark is synthetic by necessity, VDBench is validated at every stage: first by the authors, then by domain experts on the historical trajectories, then again by experts on the rendered images.</p>
+
+    <div class="validate-flow">
+      <div class="vf-card">
+        <div class="vf-n">Stage 0 &middot; Author audit</div>
+        <h4>Source filtering</h4>
+        <p>Topics with unsupported claims or unverifiable sources are removed before any expert sees them.</p>
+        <div class="vf-metric">148 / 266 retained</div>
+      </div>
+      <div class="vf-card">
+        <div class="vf-n">Stage 1 &middot; Trajectory review</div>
+        <h4>6 domain experts</h4>
+        <p>Gender studies, sociology, anthropology, media studies, literary studies, digital humanities, film archiving, migration history — each reviewing topics in their expertise.</p>
+        <div class="vf-metric">41 / 46 topics approved</div>
+      </div>
+      <div class="vf-card">
+        <div class="vf-n">Stage 1 &middot; Period agreement</div>
+        <h4>270 period ratings</h4>
+        <p>Each period description rated 1&ndash;5 for historical plausibility, with boundary edits and free-text comments invited.</p>
+        <div class="vf-metric">4.02 / 5 mean</div>
+      </div>
+      <div class="vf-card">
+        <div class="vf-n">Stage 2 &middot; Image plausibility</div>
+        <h4>501 image judgements</h4>
+        <p>Reviewers — told images are AI-generated — judged visual plausibility and correspondence to the stated topic and period.</p>
+        <div class="vf-metric">422 / 501 plausible &middot; 84.2%</div>
+      </div>
+    </div>
+    <p class="footnote-box" style="margin-top:26px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span>On the 53 images independently judged twice, reviewers agreed <strong>71.7%</strong> of the time — the residual disagreement is itself informative about how legible historical context is across topics.</span>
+    </p>
+  </div>
+</section>
+
+<!-- ============================= RESULTS ============================= -->
+<section class="section section-alt" id="results">
+  <div class="container">
+    <div class="eyebrow"><span class="num">§07</span> Baselines &amp; results</div>
+    <h2 class="section-title">Two zero-shot baselines — neither solves VDBench</h2>
+    <p class="lede">Both baselines run zero-shot and open-weight, with no VDBench training, fine-tuning, or prompt selection. <strong>Open-MLLM</strong> applies Qwen3-VL-32B-Instruct directly to both tasks. <strong>TrajEx</strong> (<em>Trajectory Explorer</em>) is a specialised pipeline: a frozen EVA-CLIP encoder estimates the year, EVA-CLIP zero-shot matching predicts environment/activity, and change-point detection over time — refined with DINOv3 features — recovers the period structure.</p>
+
+    <div class="table-wrap">
+      <table class="results">
+        <caption>Task 1 &middot; per-image context detection</caption>
+        <thead>
+          <tr><th>Output</th><th>Metric</th><th class="num">Open-MLLM</th><th class="num">TrajEx</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="rowlabel">Year</td><td>MAE (years) ↓</td><td class="num">4.72</td><td class="num win">4.65</td></tr>
+          <tr><td class="rowlabel">Environment</td><td>Accuracy / macro-F1 ↑</td><td class="num">0.26 / 0.21</td><td class="num win">0.27 / 0.26</td></tr>
+          <tr><td class="rowlabel">Activity</td><td>Accuracy / macro-F1 ↑</td><td class="num">0.28 / 0.24</td><td class="num win">0.31 / 0.32</td></tr>
+          <tr><td class="rowlabel">Caption</td><td>BERTScore / MoverScore ↑</td><td class="num">0.84 / 0.12</td><td class="num win">0.86 / 0.14</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap" style="margin-top:20px;">
+      <table class="results">
+        <caption>Task 2 &middot; trajectory structure (ground-truth Task 1 inputs)</caption>
+        <thead>
+          <tr><th>Output</th><th>Metric</th><th class="num">Open-MLLM</th><th class="num">TrajEx</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="rowlabel">Image grouping</td><td>ARI / AMI ↑</td><td class="num">0.56 / 0.66</td><td class="num win">0.79 / 0.87</td></tr>
+          <tr><td class="rowlabel">Period count</td><td>|Ĵ − J| ↓</td><td class="num win">0.63</td><td class="num">1.17</td></tr>
+          <tr><td class="rowlabel">Period range</td><td>Temporal IoU ↑</td><td class="num">0.46</td><td class="num win">0.63</td></tr>
+          <tr><td class="rowlabel">Matched order</td><td>Kendall's τ ↑</td><td class="num">0.97</td><td class="num win">1.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure class="figure" style="margin-top:28px;">
+      <div class="fig-media"><img src="assets/img/results_gallery.webp" alt="Confusion matrices comparing Open-MLLM and TrajEx image-to-period assignment on four topics: camera, bicycle, Buddha statue, and shopping mall. TrajEx reaches near-diagonal, near-100 percent assignment with high ARI (0.98, 0.36, 0.96, 0.37) on clean topics but confuses adjacent periods on harder ones; Open-MLLM shows more spread-out, blurrier assignment across periods (ARI 0.90, 0.88, 0.31, 0.52).">
+      </div>
+      <figcaption><b>Fig. 4</b>Per-topic image-to-period assignment. TrajEx is sharper on topics with clear visual eras (camera, bicycle) but both baselines blur adjacent periods on harder topics (Buddha statue, shopping mall).</figcaption>
+    </figure>
+
+    <div class="result-note">
+      <b>Neither baseline solves VDA.</b> Grouping quality drops sharply once each method relies on its own Task-1 predictions rather than ground truth — ARI falls by <strong>0.34</strong> for TrajEx and <strong>0.15</strong> for Open-MLLM. Swapping TrajEx's change-point detection for generic feature-space clustering collapses its ground-truth ARI from <strong>0.79 to 0.13</strong> — recovering a documented trajectory takes more than visual similarity alone.
+    </div>
+  </div>
+</section>
+
+<!-- ============================= LIMITATIONS ============================= -->
+<section class="section">
+  <div class="container prose-width">
+    <div class="eyebrow"><span class="num">§08</span> Limitations &amp; future work</div>
+    <div class="prose">
+      <p>Expert validation supports the historical relevance of the compiled trajectories and the plausibility of the generated images, and the first baselines — built on state-of-the-art foundation models — show the task is far from solved, making VDA an attractive target for future methods work.</p>
+      <p>Planned extensions broaden geographic and cultural coverage beyond the present sample, gather multiple independent expert reviews per topic, and incorporate licensed archival images where reliable annotations exist. On the methods side, promising directions include hybrid evaluation across synthetic and archival data, uncertainty-aware trajectory modelling, and text evaluation supported by multiple references and human assessment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= ACCESS ============================= -->
+<section class="section section-alt" id="access">
+  <div class="container">
+    <div class="cta-band">
+      <div class="cta-left">
+        <h3>Explore VDBench</h3>
+        <p>20,100 synthetic historical images across 41 topics and 201 periods, with full construction metadata, train/val/test splits, and a browsable interactive explorer.</p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="https://anonymous-hf.com/a/yx8guz54j8ct/" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg>
+          Get the dataset
+        </a>
+        <a class="btn btn-ghost" href="https://anonymousauthor287.github.io/vdbench-explorer/" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15 9-2.2 5.5a1 1 0 0 1-.55.55L7 17l2.2-5.5a1 1 0 0 1 .55-.55L15 9Z"/></svg>
+          Open the explorer
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="fbrand">VDBench</div>
+  <p>Submitted to ICLR 2027 &middot; manuscript and authorship withheld for double-blind review.<br>
+  Citation details will be added once the paper is de-anonymised after review.</p>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
